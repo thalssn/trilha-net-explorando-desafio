@@ -6,6 +6,7 @@ Console.OutputEncoding = Encoding.UTF8;
 
 
 bool exibirMenu = true;
+Suite suiteCadastrada = null;
 
 while (exibirMenu)
 {
@@ -13,8 +14,10 @@ while (exibirMenu)
     Console.WriteLine("Bem-vindo ao sistema de reservas do hotel!");
     Console.WriteLine("Digite sua opção: \n");
     Console.WriteLine("1 - Fazer reserva");
-    Console.WriteLine("2 - Consultar quartos disponíveis");
-    Console.WriteLine("3 - Encerrar \n");
+    Console.WriteLine("2 - Cadastrar novo quarto");
+    Console.WriteLine("3 - Consultar quartos disponíveis");
+    Console.WriteLine("4 - Encerrar \n");
+
 
     string entrada = Console.ReadLine();
 
@@ -30,7 +33,7 @@ while (exibirMenu)
             hospedes.Add(p1);
             hospedes.Add(p2);
 
-            Suite suite = new Suite(tipoSuite: "Premium", capacidade: 4, valorDiaria: 300);
+            Suite suite = suiteCadastrada != null ? suiteCadastrada : new Suite(tipoSuite: "Premium", capacidade: 4, valorDiaria: 300);
 
             Reserva reserva = new Reserva(diasReservados: 11);
             reserva.CadastrarSuite(suite);
@@ -61,16 +64,40 @@ while (exibirMenu)
             break;
 
         case "2":
+            Console.WriteLine("Opção 2 selecionada: Cadastrar Novo Quarto");
+            Console.WriteLine("Digite o tipo da suite: ");
+            string tipoSuite = Console.ReadLine();
 
-            Console.WriteLine("Opção 2 selecionada: Consultar Quartos Disponíveis.");
-            Suite suiteConsulta = new Suite(tipoSuite: "Premium", capacidade: 4, valorDiaria: 300);
+            Console.WriteLine("Digite a capacidade da suite:");
+            int capacidade = int.Parse(Console.ReadLine());
 
-            Console.WriteLine($"Tipo da suite: {suiteConsulta.TipoSuite}, Capacidade: {suiteConsulta.Capacidade}, Preço: R${suiteConsulta.ValorDiaria}");
+            Console.WriteLine("Digite o valor da diária: ");
+            decimal valorDiaria = decimal.Parse(Console.ReadLine());
+
+            suiteCadastrada = new Suite(tipoSuite: tipoSuite, capacidade: capacidade, valorDiaria: valorDiaria);
+
+            Console.WriteLine($"\nSuite {suiteCadastrada.TipoSuite} cadastrada com sucesso!");
             Console.WriteLine("\nPressione uma tecla para continuar...");
             Console.ReadLine();
             break;
 
         case "3":
+
+            Console.WriteLine("Opção 3 selecionada: Consultar Quartos disponíveis");
+            if (suiteCadastrada != null)
+            {
+                Console.WriteLine($"Tipo da suite: {suiteCadastrada.TipoSuite}, capacidade: {suiteCadastrada.Capacidade}, valor da diária R${suiteCadastrada.ValorDiaria}.");
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma suite foi cadastrada. Por favor, cadastre uma nova suite!");
+            }
+
+            Console.WriteLine("\nPressione uma tecla para continuar...");
+            Console.ReadLine();
+            break;
+
+        case "4":
             Console.WriteLine("Encerrando o programa...");
             exibirMenu = false;
             break;
